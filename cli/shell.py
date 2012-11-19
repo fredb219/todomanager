@@ -201,6 +201,8 @@ class Shell:
                     if self.use_rawinput:
                         try:
                             line = raw_input(self.prompt)
+                        except KeyboardInterrupt:
+                            break;
                         except EOFError:
                             break
                     else:
@@ -499,7 +501,11 @@ class Shell:
         return None
 
     def call_registered_command(self, regcmd, raw_param):
-        paramlist = shlex.split(raw_param)
+        try:
+            paramlist = shlex.split(raw_param)
+        except ValueError:
+            return False
+            
         paramlistvalid = self.is_paramlist_valid(regcmd, paramlist)
         if paramlistvalid == True:
             parsed_paramlist = self.build_callbackparam(regcmd, paramlist)
