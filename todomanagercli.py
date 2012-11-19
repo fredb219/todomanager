@@ -145,7 +145,7 @@ class CommandAddTagToTicket(TodoManagerCommand):
     def runCommand(self, todo, paramCount, args):
         tag = todo.getTagByName(args.tagName)
         if tag == None:
-            print "Tag %s does not exist" % (tag.getName())
+            print "Tag %s does not exist" % (args.tagName)
             return
 
         ticket = todo.getTicketById(args.ticketId)
