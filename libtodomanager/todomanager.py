@@ -18,9 +18,6 @@
 # along with Todomanager; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os, sys
-import pickle
-
 __all__ = [
     "ErrorCode",
     "TicketStatus",
@@ -220,32 +217,18 @@ class TicketList:
         return self.ticketList
 
 class TodoManager:
-    def __init__(self):
+    def __init__(self, serializer=None):
         self.tagList   = []
         self.ticketList    = []
         self.tagLastId = 0
         self.ticketLastId  = 0
+        self.serializer = serializer
 
-    @staticmethod
-    def loadFromFile(filePath):
-        try:
-            srcFile = open(filePath, 'rb')
-        except IOError:
-            return (ErrorCode.kFailToOpenFile, TodoManager())
+    def setSerializer(self, serializer):
+        self.serializer = serializer
 
-        retval = pickle.load(srcFile)
-        srcFile.close()
-        return (ErrorCode.kOk, retval)
-
-    def saveToFile(self, filePath):
-        tmpPath = "%s.tmp" % filePath
-        dumpFile = open(tmpPath, 'wb')
-        if dumpFile == None:
-            return ErrorCode.kFailToOpenFile
-
-        pickle.dump(self, dumpFile)
-        dumpFile.close()
-        os.rename(tmpPath, filePath)
+    def save(self):
+        self.serializer.save(self)
 
     def addTag(self, tag):
         if tag == None:

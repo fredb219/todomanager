@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from libtodomanager.todomanager import *
+from libtodomanager.persistency.pickleserializer import *
 from cli.shell import *
 from cli.commands import *
 import shlex
@@ -48,7 +49,7 @@ class TodoManagerCommand(Command):
 
     def run(self, todo, paramCount, args):
         self.runCommand(todo, paramCount, args)
-        TodoManager.saveToFile(todo, FILEPATH)
+        todo.save()
 
 class CommandPrintTagList(TodoManagerCommand):
     def __init__(self):
@@ -188,10 +189,13 @@ class CommandAddTagToTicket(TodoManagerCommand):
             return [None]
 
 if __name__ == '__main__':
-    (res, todo) = TodoManager.loadFromFile(FILEPATH)
+    serializer = PickleSerializer(FILEPATH)
+
+    (res, todo) = serializer.load()
     if res != ErrorCode.kOk:
         print "Starting from empty content"
 
+    todo.setSerializer(serializer)
     sh = Shell(todo)    
 
     cmdList = [
