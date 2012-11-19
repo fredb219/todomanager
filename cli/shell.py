@@ -202,13 +202,13 @@ class Shell:
                         try:
                             line = raw_input(self.prompt)
                         except EOFError:
-                            line = 'EOF'
+                            break
                     else:
                         self.stdout.write(self.prompt)
                         self.stdout.flush()
                         line = self.stdin.readline()
                         if not len(line):
-                            line = 'EOF'
+                            break
                         else:
                             line = line.rstrip('\r\n')
                 line = self.precmd(line)
