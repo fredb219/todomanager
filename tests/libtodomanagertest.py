@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2012 Romain Roffé
@@ -19,7 +20,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import unittest
-from todomanager import *
+from libtodomanager.todomanager import *
 
 class TestTagManagement(unittest.TestCase):
     def setUp(self):

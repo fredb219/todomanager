@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2012 Romain Roffé
@@ -20,8 +19,9 @@
 # along with Todomanager; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from todomanager import *
-from shell import *
+from libtodomanager.todomanager import *
+from cli.shell import *
+from cli.commands import *
 import shlex
 import sys
 

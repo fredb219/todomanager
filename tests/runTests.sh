@@ -1,0 +1,1 @@
+PYTHONPATH=$PYTHONPATH:..:. ./libtodomanagertest.py
