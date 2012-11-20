@@ -36,6 +36,10 @@ def tagListToString(tagList):
 
     return strTagList
 
+class CommandError:
+    kOk = 0
+    kError = 1
+
 class TodoManagerCommand(Command):
     def __init__(self, name, param_list = []):
         Command.__init__(self, name, param_list)
@@ -52,7 +56,9 @@ class CommandPrintTagList(TodoManagerCommand):
     def runCommand(self, todo, paramCount, args):
         print "Tag count : %d" % (todo.getTagCount())  
         for tag in todo.getTagList():
-            print "Id %d : '%s'" % (tag.getId(), tag.getName())  
+            print "Id %d : '%s'" % (tag.getId(), tag.getName())
+            
+        return CommandError.kOk  
 
 class CommandAddTag(TodoManagerCommand):
     def __init__(self):
@@ -70,8 +76,10 @@ class CommandAddTag(TodoManagerCommand):
         (res, createdTag) = todo.addTag(tag)
         if res == ErrorCode.kOk:
             print "Tag '%s' created with Id %d" % (createdTag.getName(), createdTag.getId())
+            return CommandError.kOk
         else:
             print ErrorCode.toString(res)
+            return CommandError.kError
 
 class CommandPrintOpenedTicketList(TodoManagerCommand):
     def __init__(self):
@@ -83,6 +91,8 @@ class CommandPrintOpenedTicketList(TodoManagerCommand):
         print "Opened tickets count : %d" % (ticketList.getTicketCount())
         for ticket in ticketList.getContent():
             print "Id %d - '%s' - Tags : %s" % (ticket.getId(), ticket.getDescription(), tagListToString(ticket.getTagList()))
+
+        return CommandError.kOk
 
 class CommandOpenTicket(TodoManagerCommand):
     def __init__(self):
@@ -102,8 +112,10 @@ class CommandOpenTicket(TodoManagerCommand):
         (res, createdTicket) = todo.addTicket(ticket)
         if res == ErrorCode.kOk:
             print "Ticket '%s' created with Id %d" % (createdTicket.getDescription(), createdTicket.getId())
+            return CommandError.kOk
         else:
             print ErrorCode.toString(res)
+            return CommandError.kError
 
 class CommandPrintTicket(TodoManagerCommand):
     def __init__(self):
@@ -122,8 +134,10 @@ class CommandPrintTicket(TodoManagerCommand):
             print "Priority : %s" % (TicketPriority.toString(ticket.getPriority()))
             print "Tag : %s" % tagListToString(ticket.getTagList())
             print "Description : %s" % (ticket.getDescription())
+            return CommandError.kOk
         else:
             print "Ticket %d not found" % (args.ticketId)
+            return CommandError.kError
 
 class CommandCloseTicket(TodoManagerCommand):
     def __init__(self):
@@ -140,10 +154,13 @@ class CommandCloseTicket(TodoManagerCommand):
             res = todo.closeTicket(ticket)
             if res == ErrorCode.kOk:
                 print "Ticket %d closed" % (ticket.getId())
+                return CommandError.kOk
             else:
                 print ErrorCode.toString(res)
+                return CommandError.kError
         else:
             print "Ticket %d not found" % (args.ticketId)
+            return CommandError.kError
 
 class CommandAddTagToTicket(TodoManagerCommand):
     kTicketId = 0
@@ -162,16 +179,19 @@ class CommandAddTagToTicket(TodoManagerCommand):
         tag = todo.getTagByName(args.tagName)
         if tag == None:
             print "Tag %s does not exist" % (args.tagName)
-            return
+            return CommandError.kError
 
         ticket = todo.getTicketById(args.ticketId)
         if ticket == None:
             print "Ticket %d not found" % (args.ticketId)
-            return
+            return CommandError.kError
 
         res = todo.addTagToTicket(ticket, tag)
         if res != ErrorCode.kOk:
             print ErrorCode.toString(res)
+            return CommandError.kError
+        else:
+            return CommandError.kOk
 
     def completeParameter(self, todo, parameterIndex, parameterContent):
 #        print "Param %d - '%s'" % (parameterIndex, parameterContent)
