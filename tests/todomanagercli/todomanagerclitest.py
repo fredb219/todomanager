@@ -21,8 +21,8 @@
 
 import unittest
 from libtodomanager.todomanager import *
-from cli.commands import *
-from cli.shell import *
+from todomanagercli.commands import *
+from todomanagercli.shell import *
 
 class TestPrintTagList(unittest.TestCase):
     def setUp(self):

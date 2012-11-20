@@ -21,8 +21,8 @@
 
 from libtodomanager.todomanager import *
 from libtodomanager.persistency.pickleserializer import *
-from cli.shell import *
-from cli.commands import *
+from todomanagercli.shell import *
+from todomanagercli.commands import *
 
 FILEPATH = "todolist.bin"
 
