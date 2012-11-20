@@ -71,7 +71,7 @@ import string
 import shlex
 import sys
 
-__all__ = ["Shell", "ParameterType", "Parameter", "Command"]
+__all__ = ["Shell", "ParameterType", "Parameter", "Command", "HandlerParam"]
 
 PROMPT = '(Cmd) '
 IDENTCHARS = string.ascii_letters + string.digits + '_'
@@ -120,7 +120,7 @@ class Command:
     def completeParameter(self, todo, parameterIndex, parameterContent):
         return []
 
-class CallbackParam:
+class HandlerParam:
     None
 
 class Shell:
@@ -539,7 +539,7 @@ class Shell:
             return ret
 
     def build_callbackparam(self, regcmd, param_list):
-        ret = CallbackParam()
+        ret = HandlerParam()
 
         i = 0
         for param in param_list:
